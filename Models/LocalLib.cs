@@ -21,15 +21,24 @@ namespace Library.Models
 
         public string checkOutBook(int index)
         {
-            Book book = Books[index];
-
-            if (Books.Contains(book))
+            if (Books.Contains(Books[index]) && Books[index].Available)
             {
-                CheckedOut.Add(book);
-                Books.Remove(book);
-                return $"{book.Name}";
+                CheckedOut.Add(Books[index]);
+                Books[index].BookAvailable(false);
+                return $"{Books[index].Name}";
             }
-            return $"{book.Name} isn't available";
+            return $"{Books[index].Name} isn't available";
+        }
+
+        public string returnBook(int index)
+        {
+            if (Books.Contains(Books[index]) && CheckedOut.Contains(Books[index]))
+            {
+                Books[index].BookAvailable(true);
+                CheckedOut.Remove(Books[index]);
+                return "Book Has been returned. ThankYou.";
+            }
+            return "We don't seem to have reccord of that book. Check another Library.";
         }
 
         public Book infoBook(int index)
@@ -60,6 +69,7 @@ namespace Library.Models
             Location = location;
             Name = name;
             Books = new List<Book>();
+            CheckedOut = new List<Book>();
         }
     }
 }

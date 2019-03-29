@@ -9,10 +9,10 @@ namespace Library
         static void Main(string[] args)
         {
 
-            Book silverstien1 = new Book("Shell Silverstein", "Where the SideWalk Ends");
-            Book tolkien = new Book("J.R.R. Tolkien","The Lord Of The Rings" );
-            Book lewis = new Book("C.S. Lewis", "The Lion The Witch and the Wardrobe");
-            Book rowling = new Book("J.K. Rowling", "Harry Potter and the Gobblet Of Fire");
+            Book silverstien1 = new Book("Where the SideWalk Ends","Shell Silverstein" );
+            Book tolkien = new Book("The Lord Of The Rings","J.R.R. Tolkien");
+            Book lewis = new Book("The Lion The Witch and the Wardrobe","C.S. Lewis");
+            Book rowling = new Book("Harry Potter and the Gobblet Of Fire","J.K. Rowling");
 
             LocalLib caldwell = new LocalLib("Caldwell, Id", "Caldwell Library");
             caldwell.AddBook(silverstien1);
@@ -30,21 +30,70 @@ namespace Library
 
             Console.ResetColor();
 
-            Console.WriteLine("Please select a book number to checkout");
-            string requestString = Console.ReadLine();
-            int outIndex = checkInputValReturnNum(requestString);
-            if (caldwell.checkBook(outIndex))
+            while (true)
             {
-                colorOutput($"You have chosen {caldwell.infoBook(outIndex).Name}. Continue \"Y\"", "Yellow");
-                string answer = Console.ReadLine().ToUpper();
-                if ( answer == "Y")
+                colorOutput("Are you here to \"C\" checkout or \"R\" return books", "Yellow");
+                string input = Console.ReadLine().ToUpper();
+                if (input == "C")
                 {
-                    colorOutput($"Result: {caldwell.checkOutBook(outIndex)}", "Blue");
-                }else
+                    Console.WriteLine("Please select a book number to checkout");
+                    string requestString = Console.ReadLine();
+                    int outIndex = checkInputValReturnNum(requestString);
+                    if (!caldwell.checkBook(outIndex))
+                    {
+                        colorOutput("That isn't a good index number", "Red");
+                        continue;
+                    }
+                    else
+                    {
+                        colorOutput($"You have chosen {caldwell.infoBook(outIndex).Name}. Continue \"Y\"", "Yellow");
+                        string answer = Console.ReadLine().ToUpper();
+                        if (answer == "Y")
+                        {
+                            colorOutput($"Result: {caldwell.checkOutBook(outIndex)}", "Blue");
+                            return;
+                        }
+                        else
+                        {
+                            colorOutput("Response not \"Y\". Book not checked out. Thankyou.", "Red");
+                            return;
+                        }
+                    }
+
+                }
+                else if (input == "R")
                 {
-                    colorOutput("Responce not \"Y\". Book not checked out. Thankyou.", "Red");
+                    colorOutput("Please Enter the index of your book from the list above", "Blue");
+                    string requestString = Console.ReadLine();
+                    int outIndex = checkInputValReturnNum(requestString);
+
+                    if (!caldwell.checkBook(outIndex))
+                    {
+                        colorOutput("That isn't a good index number", "Red");
+                        continue;
+                    }
+                    else
+                    {
+                        colorOutput(caldwell.returnBook(outIndex), "Green");
+                        return;
+                    }
+                }
+                else
+                {
+                    colorOutput("You didn't select \"C\" or \"R\". Do you want to continue. \"Y\" or \"N\" to leave.", "Red");
+                    string leave = Console.ReadLine().ToUpper();
+                    if (leave == "Y")
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
             }
+
+
         }
         static int checkInputValReturnNum(string input)
         {
