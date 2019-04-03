@@ -12,7 +12,7 @@ namespace Library.Models {
 
         public List<IAvailable> AvailableItems { get; set; }
 
-        List<IAvailable> CheckedOut { get; set; }
+        public List<IAvailable> CheckedOut { get; set; }
 
         public void AddItemCheckout (Book item) {
             AvailableItems.Add (item);
@@ -64,6 +64,7 @@ namespace Library.Models {
                 if (AvailableItems[i] is Book g && g.Available) {
                     Console.Write ($"{g.Name}");
                 }
+                System.Console.WriteLine ("\n");
             }
         }
 
